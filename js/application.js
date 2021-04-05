@@ -10,7 +10,7 @@ class MathLogic {
     number1 = 0;
     number2 = 0;
     operand = '+';
-    base = 10;
+    base = 9; // non-zero fix
 
     constructor() {
         this.verifyAnswer = this.verifyAnswer.bind(this);
@@ -38,8 +38,29 @@ class MathLogic {
         }.bind(this));
     }
 
+    sortNums(arr) {
+        return arr.sort((a,b) => a - b);
+    }
+
     roll(max) {
-        return Math.floor(Math.random() * max);
+        var num1 =  Math.ceil(Math.random() * max);
+        var num2 = Math.ceil(Math.random() * max);
+
+        if (num1 > num2) { // Minus fix makes sure larger num is always on left side
+            [num1, num2] = this.sortNums([num1, num2]);
+        }
+    
+
+
+        this.computerAnswer = this.calculateAnswer(num1, num2, this.operand);
+        if (this.operand === '/') {
+            // Swap answer with 
+        }
+       
+        return {
+            num1 : num1,
+            num2 : num2,
+        }
     }
 
     resetTimer() {
@@ -50,11 +71,14 @@ class MathLogic {
     }
 
     resetNums() {
-        this.number1 = this.roll(this.base);
+        var {num1, num2} = this.roll(this.base);
+
+        this.number1 = num1;
+        this.number2 = num2;
+
         this.updateDom($('#number-1'), this.number1);
-        this.number2 = this.roll(this.base);
         this.updateDom($('#number-2'), this.number2);
-        this.computerAnswer = this.calculateAnswer(this.number1, this.number2, this.operand);
+        
     }
     
     setHighScore() {
@@ -95,18 +119,21 @@ class MathLogic {
     }
 
     startTimer() {
-        this.timer = setInterval(() => {
-            this.currentTimer++;
-            var currentTime = this.timerMax - this.currentTimer;
-            if (currentTime >= 0) {
-                this.updateDom($('#countdown'), currentTime);
+        if (!this.timer) {
+            this.timer = setInterval(() => {
+                this.currentTimer++;
+                var currentTime = this.timerMax - this.currentTimer;
+                if (currentTime >= 0) {
+                    this.updateDom($('#countdown'), currentTime);
 
-            } else {
-                clearInterval(this.timer);
-                this.timer = undefined;
-                this.init();
-            }
-        }, 1000);
+                } else {
+                    clearInterval(this.timer);
+                    this.timer = undefined;
+                    this.init();
+                }
+            }, 1000);
+
+        }
     }
 
     verifyAnswer() {
@@ -132,8 +159,8 @@ class MathLogic {
         }, 10);
     }
 }
-
+var game;
 $(document).ready(function () {
     console.log('loading')
-    new MathLogic();
+    game = new MathLogic();
 });
