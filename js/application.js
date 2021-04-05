@@ -31,7 +31,6 @@ class MathLogic {
             setTimeout(() => {
                 
                 var operant = $('.btn-group').find('.active > input')[0].nextSibling.textContent.trim();
-                console.log(operant);
                 this.setOperand(operant);
                 this.timer && clearInterval(this.timer);
             },100);
@@ -39,23 +38,21 @@ class MathLogic {
     }
 
     sortNums(arr) {
-        return arr.sort((a,b) => a - b);
+        return arr.sort((a,b) => b >= a);
     }
 
     roll(max) {
         var num1 =  Math.ceil(Math.random() * max);
         var num2 = Math.ceil(Math.random() * max);
 
-        if (num1 > num2) { // Minus fix makes sure larger num is always on left side
+        if (num1 < num2) { // Minus fix makes sure larger num is always on left side
             [num1, num2] = this.sortNums([num1, num2]);
         }
         
         if (this.operand === '/') {
             var tempAnswer = num1 * num2;
-            console.log(tempAnswer, num1, num2);
-            this.computerAnswer = tempAnswer / num1;
-            num2 = tempAnswer;
-            console.log(this.computerAnswer, num1, num2);
+            this.computerAnswer = tempAnswer / num2;
+            num1 = tempAnswer;
         } else {
             this.computerAnswer = this.calculateAnswer(num1, num2, this.operand);
         }
