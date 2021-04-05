@@ -39,7 +39,7 @@ class MathLogic {
     }
 
     sortNums(arr) {
-        return arr.sort((a,b) => a - b);
+        return arr.sort((a,b) => b - a);
     }
 
     roll(max) {
@@ -53,8 +53,8 @@ class MathLogic {
         if (this.operand === '/') {
             var tempAnswer = num1 * num2;
             console.log(tempAnswer, num1, num2);
-            this.computerAnswer = tempAnswer / num1;
-            num2 = tempAnswer;
+            this.computerAnswer = tempAnswer / num2;
+            num1 = tempAnswer;
             console.log(this.computerAnswer, num1, num2);
         } else {
             this.computerAnswer = this.calculateAnswer(num1, num2, this.operand);
