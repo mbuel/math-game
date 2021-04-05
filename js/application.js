@@ -1,112 +1,139 @@
-'use strict';
+// TODO: create class
+class MathLogic {
+    highScore = 0;
+    playerScore = 0;
+    timer = undefined;
+    timerMax = 10;
+    currentTimer = 0;
+    playerAnswer = $('#player-input');
+    computerAnswer = 0;
+    number1 = 0;
+    number2 = 0;
+    operand = '+';
+    base = 10;
 
-// template string 
-var templateString = `<!-- Template Row to add per item -->
-      <div class="row grocery-item text-center">
-        <div class="item-name col-3">
-          <!-- item name -->
-          %ITEM%
-        </div>
-        <div class="cost col-3">
-          <!-- item price -->
-          <input type="number" value="%PRICE%" />
-        </div>
-        <div class="qty col-3">
-          <!-- item quantity -->
-          <input type="number" value="%QTY%" />
-        </div>
-        <div class="col-3">
-          <!-- item remove -->
-          <div class="summary row">
-            <div class="total col-6 text-success">
-              %TOTAL%
-            </div>
-            <div class="col-6">
-              <div class="btn remove btn-danger text-center rounded-pill"><i class="fa fa-remove"></i></div>
-            </div>
-          </div>
-        </div>
-      </div>`;
+    constructor() {
+        this.verifyAnswer = this.verifyAnswer.bind(this);
+        this.init = this.init.bind(this);
+        $('#player-input').on('click', () => {
+            $('#player-input').select();
+            this.startTimer();
+        });
+        $('#btn-answer').on('click', this.verifyAnswer);
+        $(document).on('keypress', function(e) {
+            if(e.originalEvent.key === 'Enter') {
+                this.verifyAnswer();
+            }
+        }.bind(this));
+        this.init();
 
-// Currency Formatter
-// https://flaviocopes.com/how-to-format-number-as-currency-javascript/
-const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2
-  })
-  
-
-var updateRowTotalCost = function(row) {
-    var itemQty = parseFloat($(row).find('.qty input').val());
-    var itemCost = parseFloat($(row).find('.cost input').val());
-
-    var rowCostTotal = itemQty * itemCost;
-    $(row).find('.total').text(formatter.format(rowCostTotal));
-    
-    return {
-        rowCostTotal: rowCostTotal,
-        itemQty : itemQty
-    };
-}
-
-var updateTotalCosts = function() {
-    var totalCost = 0;
-    var totalItems = 0;
-    $('.list > .grocery-item').each(function(i, ele) {
-        var {rowCostTotal, itemQty} = updateRowTotalCost(ele);
-        console.log(rowCostTotal, itemQty);
-        totalItems += itemQty;
-        totalCost += rowCostTotal;
-    });
-    $('#total-items').text(Math.floor(totalItems));
-    $('#total-cost').text(formatter.format(totalCost));
-}
-
-var addItemToList = function() {
-    var item = $('#new-item').val();
-    var qty = $('#new-qty').val();
-    var cost = $('#new-cost').val();
-    
-    console.log(item, qty, cost);
-
-    // check values
-
-    if (!item || !qty || !cost) {
-        alert('Cannot add this item to the list.');
-        return;
+        $('.btn-group').on('click', function() {
+            setTimeout(() => {
+                
+                var operant = $('.btn-group').find('.active > input')[0].nextSibling.textContent.trim();
+                console.log(operant);
+                this.setOperand(operant);
+                this.timer && clearInterval(this.timer);
+            },100);
+        }.bind(this));
     }
 
-    var item = templateString.replace(/%ITEM%/, item).replace(/%QTY%/, qty).replace(/%PRICE%/, cost);
+    roll(max) {
+        return Math.floor(Math.random() * max);
+    }
 
-    $('.list').append(item);
+    resetTimer() {
+        this.currentTimer = 0;
+        this.updateDom($('#countdown'), this.timerMax);
+        clearInterval(this.timer);
+        this.timer = undefined;
+    }
 
-    updateTotalCosts();
-}
+    resetNums() {
+        this.number1 = this.roll(this.base);
+        this.updateDom($('#number-1'), this.number1);
+        this.number2 = this.roll(this.base);
+        this.updateDom($('#number-2'), this.number2);
+        this.computerAnswer = this.calculateAnswer(this.number1, this.number2, this.operand);
+    }
+    
+    setHighScore() {
+        this.highScore = this.highScore < this.playerScore ? this.playerScore : this.highScore;
+        this.updateDom($('#high-score'), this.highScore);
+    }
 
+    resetPlayerScore() {
+        this.playerScore = 0;
+        this.updateDom($('#player-score'), this.playerScore);
+    }
 
-var timeout;
-var updateList = function() {
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-        updateTotalCosts();
-    }, 250);
+    init() {
+        this.resetNums();
+        this.setHighScore();
+        this.resetPlayerScore();
+        this.resetTimer();
+
+    }
+
+    setOperand(operant) {
+        this.operand = operant;
+        this.updateDom($('#operand'), this.operand);
+        this.init();
+    }
+
+    calculateAnswer(num1, num2, operand) {
+        switch(operand) {
+            case '+':
+                return num1 + num2;
+            case '-':
+                return num1 - num2;
+            case '*':
+                return num1 * num2;
+            case '/':
+                return Math.floor(num1 / num2);
+        }
+    }
+
+    startTimer() {
+        this.timer = setInterval(() => {
+            this.currentTimer++;
+            var currentTime = this.timerMax - this.currentTimer;
+            if (currentTime >= 0) {
+                this.updateDom($('#countdown'), currentTime);
+
+            } else {
+                clearInterval(this.timer);
+                this.timer = undefined;
+                this.init();
+            }
+        }, 1000);
+    }
+
+    verifyAnswer() {
+        var answer = this.playerAnswer.val();
+
+        if (answer == this.computerAnswer) {
+            this.playerScore++;
+            this.updateDom($('#player-score'), this.playerScore);
+            this.resetNums();
+            this.resetTimer();
+            this.startTimer();
+        } else {
+            clearInterval(this.timer);
+            this.timer = undefined;
+            this.init();
+        }
+        $('#player-input').select();
+    }
+
+    updateDom(dom, val) {
+        setTimeout((e) => {
+            dom.text(val);
+        }, 10);
+    }
 }
 
 $(document).ready(function () {
-    updateTotalCosts();
-    
-    $('.list').parent().on('click', '.remove', function (event) {
-
-        $(this).parent().parent().parent().parent().remove();
-        updateTotalCosts();
-
-    });
-    
-    $('.list').on('input', updateList);
-
-    $('.add').on('click', addItemToList); 
-
-
-
+    console.log('loading')
+    new MathLogic();
 });

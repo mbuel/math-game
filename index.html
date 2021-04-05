@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./js/application.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/fontawesome.min.js"></script>
+    <script src="./js/application.js"></script>
     
     <link href="./css/custom.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
@@ -24,10 +28,31 @@
                 </h1>
                 <hr>
                 <div class="math-form">
-                    <div class="timer text-monospace">
+                    <div class="timer">
                         <h3>
-                            You have <span id="countdown" class="alert-primary">10</span> seconds
+                            You have <span id="countdown" class="text-monospace alert-primary">10</span> seconds
                         </h3>
+                    </div>
+                    <hr>
+                    <div id="operand-selection">
+                        <h3>
+                            Select Operand?
+                        </h3>
+                        <br>
+                        <div id="options" class="btn-group btn-group-toggle text-monospace" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                            <input type="radio" name="options" id="plus" autocomplete="off" checked> +
+                            </label>
+                            <label class="btn btn-primary">
+                            <input type="radio" name="options" id="minus" autocomplete="off"> -
+                            </label>
+                            <label class="btn btn-primary">
+                            <input type="radio" name="options" id="times" autocomplete="off"> *
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="radio" name="options" id="divide" autocomplete="off"> /
+                            </label>
+                        </div>
                     </div>
                     <hr>
                     <div class="question">
@@ -35,11 +60,17 @@
                             What is the solution?
                         </h3>
                         <h4>
-                            <span id="number-1" class="alert-secondary">4</span> <span id="operand" class="alert-secondary">+</span> <span id="number-2" class="alert-secondary">4</span> 
+                            <span id="number-1" class="text-monospace alert-secondary">4</span> <span id="operand" class="text-monospace alert-secondary">+</span> <span id="number-2" class="text-monospace alert-secondary">4</span> 
                         </h4>
                     </div>
                     <div class="answer">
-                        <input type="text" class="form"> <button id="answer" class="btn btn-info">Answer</button>
+                        <input id="player-input" type="number" class="form text-center" value="0"> <button id="btn-answer" class="btn btn-info">Answer</button>
+                    </div>
+                    <hr>
+                    <div class="scoreboard">
+                        Player Score: <span id="player-score">0</span>
+                        <br>
+                        High Score: <span id="high-score">0</span>
                     </div>
                 </div>
             </div>
