@@ -49,12 +49,15 @@ class MathLogic {
         if (num1 > num2) { // Minus fix makes sure larger num is always on left side
             [num1, num2] = this.sortNums([num1, num2]);
         }
-    
-
-
-        this.computerAnswer = this.calculateAnswer(num1, num2, this.operand);
+        
         if (this.operand === '/') {
-            // Swap answer with 
+            var tempAnswer = num1 * num2;
+            console.log(tempAnswer, num1, num2);
+            this.computerAnswer = tempAnswer / num1;
+            num2 = tempAnswer;
+            console.log(this.computerAnswer, num1, num2);
+        } else {
+            this.computerAnswer = this.calculateAnswer(num1, num2, this.operand);
         }
        
         return {
