@@ -28,28 +28,28 @@
                 </h1>
                 <hr>
                 <div class="math-form">
-                    <div class="timer text-monospace">
+                    <div class="timer">
                         <h3>
-                            You have <span id="countdown" class="alert-primary">10</span> seconds
+                            You have <span id="countdown" class="text-monospace alert-primary">10</span> seconds
                         </h3>
                     </div>
                     <hr>
-                    <div id="operand">
+                    <div id="operand-selection">
                         <h3>
                             Select Operand?
                         </h3>
                         <br>
-                        <div id="options" class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-secondary active">
+                        <div id="options" class="btn-group btn-group-toggle text-monospace" data-toggle="buttons">
+                            <label class="btn btn-primary active">
                             <input type="radio" name="options" id="plus" autocomplete="off" checked> +
                             </label>
-                            <label class="btn btn-secondary">
+                            <label class="btn btn-primary">
                             <input type="radio" name="options" id="minus" autocomplete="off"> -
                             </label>
-                            <label class="btn btn-secondary">
+                            <label class="btn btn-primary">
                             <input type="radio" name="options" id="times" autocomplete="off"> *
                             </label>
-                            <label class="btn btn-secondary">
+                            <label class="btn btn-primary">
                                 <input type="radio" name="options" id="divide" autocomplete="off"> /
                             </label>
                         </div>
@@ -60,13 +60,18 @@
                             What is the solution?
                         </h3>
                         <h4>
-                            <span id="number-1" class="alert-secondary">4</span> <span id="operand" class="alert-secondary">+</span> <span id="number-2" class="alert-secondary">4</span> 
+                            <span id="number-1" class="text-monospace alert-secondary">4</span> <span id="operand" class="text-monospace alert-secondary">+</span> <span id="number-2" class="text-monospace alert-secondary">4</span> 
                         </h4>
                     </div>
                     <div class="answer">
                         <input id="player-input" type="number" class="form text-center" value="0"> <button id="btn-answer" class="btn btn-info">Answer</button>
                     </div>
                     <hr>
+                    <div class="scoreboard">
+                        Player Score: <span id="player-score">0</span>
+                        <br>
+                        High Score: <span id="high-score">0</span>
+                    </div>
                 </div>
             </div>
         </div>
